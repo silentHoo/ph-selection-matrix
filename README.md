@@ -8,21 +8,27 @@ contact me, open an issue or make a pull request with the improved code.
 
 The elements are in an early stage but can be used in production.
 
-## Install via bower
+## 1. Install
 
 `bower install silentHoo/ph-selection-matrix`
 
-Run the command above from your project root
+Run the command above from your project root.
+
+## 2. Import
+
 Import the component by adding this to your HTML file:
+
 `<link rel="import" href="components/ph-selection-matrix/ph-selection-matrix.html">`
+
+## 3. Use
+
+See the [component page](http://silentHoo.github.io/ph-selection-matrix) for more information.
 
 ## Screenshots
 
 ![Selection matrix in single-mode](screenshot_single-mode.png?raw=true "Selection matrix in single-mode")
 ![Selection matrix in multi-mode](screenshot_multi-mode.png?raw=true "Selection matrix in multi-mode")
 ![Selection matrix in single-mode with preselected column](screenshot_single-mode_preselected.png?raw=true "Selection matrix in single-mode  with preselected column")
-
-See the [component page](http://silentHoo.github.io/ph-selection-matrix) for more information.
 
 ## License
 
