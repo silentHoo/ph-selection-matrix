@@ -1,4 +1,4 @@
-ph-selection-matrix
+# ph-selection-matrix
 ================
 
 This is one element in a series of different survey elements. It were build as part of my 
@@ -8,8 +8,7 @@ contact me, open an issue or make a pull request with the improved code.
 
 The elements are in an early stage but can be used in production.
 
-Install via bower
-================
+## Install via bower
 
 `bower install silentHoo/ph-selection-matrix`
 
@@ -17,8 +16,7 @@ Run the command above from your project root
 Import the component by adding this to your HTML file:
 `<link rel="import" href="components/ph-selection-matrix/ph-selection-matrix.html">`
 
-Screenshots
-================
+## Screenshots
 
 ![Selection matrix in single-mode](screenshot_single-mode.png?raw=true "Selection matrix in single-mode")
 ![Selection matrix in multi-mode](screenshot_multi-mode.png?raw=true "Selection matrix in multi-mode")
@@ -26,8 +24,7 @@ Screenshots
 
 See the [component page](http://silentHoo.github.io/ph-selection-matrix) for more information.
 
-License
-================
+## License
 
 Copyright (c) 2014 Patrick Hillert. All rights reserved.
 
