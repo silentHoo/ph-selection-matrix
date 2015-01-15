@@ -1,0 +1,276 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../paper-radio-button/paper-radio-button.html">
+
+<!--
+This component allows you to easily setup an interactive **n x m matrix**. You can use the matrix in two
+different modes:
+
+  1) *single answer*: Will allow the user to only check one item/answer per row.
+
+  2) *multi answer*: Will allow the user to check multiple items/answers per row.
+
+Example 1: **Radio buttons to select one answer per row**
+
+    <ph-selection-matrix mode="single-answer">
+      <col-item>Product 1</col-item>
+      <col-item>Product 2</col-item>
+      <col-item>Product 3</col-item>
+      <col-item>Product 4</col-item>
+      <col-item>Product 5</col-item>
+
+      <row-item>Feature A</row-item>
+      <row-item>Feature B</row-item>
+      <row-item>Feature C</row-item>
+    </ph-selection-matrix>
+
+Example 2: **Checkbox to select multiple answers per row**
+
+    <ph-selection-matrix mode="multi-answer">
+      <col-item>Product 1</col-item>
+      <col-item>Product 2</col-item>
+      <col-item>Product 3</col-item>
+      <col-item>Product 4</col-item>
+      <col-item>Product 5</col-item>
+
+      <row-item>Feature A</row-item>
+      <row-item>Feature B</row-item>
+      <row-item>Feature C</row-item>
+    </ph-selection-matrix>
+
+Example 3: **Checkbox to select multiple answers per row and preselect the `Product 5` column**
+
+    <ph-selection-matrix mode="multi-answer" preselectedColumn="5">
+      <col-item>Product 1</col-item>
+      <col-item>Product 2</col-item>
+      <col-item>Product 3</col-item>
+      <col-item>Product 4</col-item>
+      <col-item>Product 5</col-item>
+
+      <row-item>Feature A</row-item>
+      <row-item>Feature B</row-item>
+      <row-item>Feature C</row-item>
+    </ph-selection-matrix>
+
+@group Question Type Survey Elements
+@element ph-selection-matrix
+@homepage https://github.com/silentHoo
+@demo
+-->
+
+<polymer-element name="ph-selection-matrix" attributes="mode preselectedColumn">
+  <template>
+    <link rel="stylesheet" href="ph-selection-matrix.css">
+
+    <!-- There seems no solution to use <content> to prevent the rendering of the distributed nodes -->
+    <!--  -> related: https://www.w3.org/Bugs/Public/show_bug.cgi?id=18429 -->
+    <div style="display: none;">
+      <content id="cols" select="col-item"></content>
+      <content id="rows" select="row-item"></content>
+    </div>
+
+    <!-- we will put them all in one table -->
+    <table border="0">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+
+          <!-- repeat for every column -->
+          <template repeat="{{ col in _distributedNodes.cols }}">
+            <!-- the column's name -->
+            <th>{{ col }}</th>
+          </template>
+
+        </tr>
+      </thead>
+
+      <tbody>
+
+      <template repeat="{{ row, rowIndex in _distributedNodes.rows }}">
+        <tr class="row">
+          <!-- the row's name -->
+          <td class="first-column">{{ row }}</td>
+
+          <!-- repeat for every column -->
+          <template repeat="{{ col, colIndex in _distributedNodes.cols }}">
+            <td class="other-column">
+
+              <!-- depending on the mode we use either a checkbox ... -->
+              <template if="[[ mode == 'multi-answer' ]]" bind ref="multiAnswerTemplate"></template>
+
+              <!-- ... or a radio button -->
+              <template if="[[ mode == 'single-answer' ]]" bind ref="singleAnswerTemplate"></template>
+            </td>
+          </template>
+
+        </tr>
+      </template>
+
+      </tbody>
+    </table>
+
+    <!-- START bound templates -->
+    <template id="multiAnswerTemplate">
+      <paper-checkbox
+        class="item"
+        on-change="{{ onCheckStateChange }}"
+        row-index="{{ rowIndex }}"
+        col-index="{{ colIndex }}">
+      </paper-checkbox>
+    </template>
+
+    <template id="singleAnswerTemplate">
+      <paper-radio-button
+        class="item"
+        on-change="{{ onCheckStateChange }}"
+        row-index="{{ rowIndex }}"
+        col-index="{{ colIndex }}">
+      </paper-radio-button>
+    </template>
+    <!-- END bound templates -->
+
+  </template>
+
+  <script>
+    (function () {
+
+      Polymer({
+        /**
+         * The answer mode. Valid modes are `single-answer` and `multi-answer`.
+         *
+         * **single-answer** will show radio buttons so that in every row only one answer can be checked.
+         *
+         * **multi-answer** will show checkboxes so that multiple answers can be checked.
+         *
+         * @attribute mode
+         * @type String
+         * @default 'single-answer'
+         */
+
+        /**
+         * If set to a number between **0** and **count(&lt;col-item&gt;s)**, the given column will be selected.
+         *
+         * @attribute preselectedColumn
+         * @type Integer
+         * @default ''
+         */
+        publish: {
+          mode: 'single-answer',
+          preselectedColumn: -1
+        },
+
+        _distributedNodes: {
+          cols: [],
+          rows: []
+        },
+
+        _matrixState: [],
+
+        ready: function() {
+          this._initMatrixState();
+        },
+
+        domReady: function() {
+          if (this.preselectedColumn !== -1) {
+            if (this.preselectedColumn > 0 && this.preselectedColumn < this._distributedNodes.cols.length) {
+              this._checkColumn(this.preselectedColumn - 1);
+            } else {
+              console.log('The preselected column is not > 0 nor <= the column count!');
+            }
+          }
+        },
+
+        _prepareDistributedNodes: function(name, distributedNodes) {
+          this._distributedNodes[name] = [];
+
+          [].forEach.call(distributedNodes, function(node, i) {
+            this._distributedNodes[name].push(node.innerHTML);
+          }, this);
+        },
+
+        _restoreMatrixState: function() {
+          this._iterateMatrix((function(rowId, colId) {
+            this._getItem(rowId, colId).checked = this._matrixState[rowId][colId];
+          }).bind(this));
+        },
+
+        _initMatrixState: function() {
+          // read in the content nodes
+          this._prepareDistributedNodes('cols', this.$.cols.getDistributedNodes());
+          this._prepareDistributedNodes('rows', this.$.rows.getDistributedNodes());
+
+          // set the state array, based on the distributed content nodes
+          this._iterateMatrix((function(rowId, colId) {
+            if (!this._matrixState[rowId]) {
+              this._matrixState[rowId] = [];
+            }
+            // everything is initially unchecked
+            this._matrixState[rowId][colId] = false;
+          }).bind(this));
+        },
+
+        _iterateMatrix: function(cellProcessingCallback) {
+          for (var rowId = 0; rowId < this._distributedNodes.rows.length; rowId++) {
+            for (var colId = 0; colId < this._distributedNodes.cols.length; colId++) {
+              cellProcessingCallback(rowId, colId);
+            }
+          }
+        },
+
+        // save the check into the matrix state to persist
+        onCheckStateChange: function(event, detail, sender) {
+          // check the clicked item
+          var rowId = sender.getAttribute('row-index');
+          var colId = sender.getAttribute('col-index');
+
+          // uncheck all other columns in that row
+          if (this.mode == 'single-answer') {
+            this._uncheckAllInRow(rowId);
+            this._checkItem(rowId, colId);
+          } else if (this.mode == 'multi-answer') {
+            this._matrixState[rowId][colId] = sender.checked;
+          }
+        },
+
+        // @todo How can we refactor that so that it works just with data-binding in a way that only the
+        // _matrixState holds the state and the UI is build up on that single source of truth?
+        //  -> related: https://stackoverflow.com/questions/27943365/polymer-repeat-template-bidirectional-data-binding
+        _checkItem: function(rowId, colId) {
+          this._getItem(rowId, colId).checked = true;
+          this._matrixState[rowId][colId] = true;
+        },
+
+        // @todo How can we refactor that so that it works just with data-binding in a way that only the
+        // _matrixState holds the state and the UI is build up on that single source of truth?
+        //  -> related: https://stackoverflow.com/questions/27943365/polymer-repeat-template-bidirectional-data-binding
+        _uncheckAllInRow: function(rowId) {
+          var items = this._getItemsInRow(rowId);
+
+          for (var currCol = 0; currCol < items.length; currCol++) {
+            this._getItem(rowId, currCol).checked = false;
+            this._matrixState[rowId][currCol] = false;
+          }
+        },
+
+        _checkColumn: function(colId) {
+          for (var currRowId = 0; currRowId < this._distributedNodes.rows.length; currRowId++) {
+            this._checkItem(currRowId, colId);
+          }
+        },
+
+        _getItemsInRow: function(rowId) {
+          var rows = this.shadowRoot.querySelectorAll('.row');
+          var row = rows[rowId];
+          var items = row.querySelectorAll('.item');
+
+          return items;
+        },
+
+        _getItem: function(rowId, colId) {
+          var items = this._getItemsInRow(rowId);
+          return items[colId];
+        }
+      });
+    })();
+  </script>
+</polymer-element>

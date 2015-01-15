@@ -1,0 +1,31 @@
+{
+  "author": "Patrick Hillert",
+  "name": "ph-selection-matrix",
+  "description": "A selection m x n matrix which allows interactive usage.",
+  "license": "BSD",
+  "keywords": [
+    "selection matrix",
+    "polymer",
+    "web-components"
+  ],
+  "main": "ph-selection-matrix.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.2",
+    "paper-checkbox": "Polymer/paper-checkbox#^0.5.2",
+    "paper-radio-button": "Polymer/paper-radio-button#^0.5.2"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^2.0.0"
+  },
+  "homepage": "https://github.com/silentHoo/ph-selection-matrix",
+  "_release": "b88da024d5",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "b88da024d51ca929a220d98dd7c8d0c4c0e917c9"
+  },
+  "_source": "git://github.com/silentHoo/ph-selection-matrix.git",
+  "_target": "*",
+  "_originalSource": "silentHoo/ph-selection-matrix",
+  "_direct": true
+}

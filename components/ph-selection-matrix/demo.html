@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>ph-selection-matrix Demo</title>
+
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="ph-selection-matrix.html">
+
+</head>
+<body unresolved>
+
+  <p>An `ph-selection-matrix` (without any configuration, defaults to `single-mode`) looks like:</p>
+
+  <ph-selection-matrix>
+      <col-item>Product 1</col-item>
+      <col-item>Product 2</col-item>
+      <col-item>Product 3</col-item>
+      <col-item>Product 4</col-item>
+      <col-item>Product 5</col-item>
+
+      <row-item>Feature A</row-item>
+      <row-item>Feature B</row-item>
+      <row-item>Feature C</row-item>
+  </ph-selection-matrix>
+  
+  <br>
+  <br>
+  
+  <p>An `ph-selection-matrix` (`multi-answer`) looks like:</p>
+
+  <ph-selection-matrix mode="multi-answer">
+      <col-item>Product 1</col-item>
+      <col-item>Product 2</col-item>
+      <col-item>Product 3</col-item>
+      <col-item>Product 4</col-item>
+      <col-item>Product 5</col-item>
+
+      <row-item>Feature A</row-item>
+      <row-item>Feature B</row-item>
+      <row-item>Feature C</row-item>
+  </ph-selection-matrix>
+  
+  <br>
+  <br>
+  
+  <p>An `ph-selection-matrix` (`multi-answer`, `preselectedColumn="2"`) looks like:</p>
+
+  <ph-selection-matrix mode="multi-answer" preselectedColumn="2">
+      <col-item>Product 1</col-item>
+      <col-item>Product 2</col-item>
+      <col-item>Product 3</col-item>
+      <col-item>Product 4</col-item>
+      <col-item>Product 5</col-item>
+
+      <row-item>Feature A</row-item>
+      <row-item>Feature B</row-item>
+      <row-item>Feature C</row-item>
+  </ph-selection-matrix>
+
+</body>
+</html>
