@@ -8,6 +8,10 @@ contact me, open an issue or make a pull request with the improved code.
 
 The elements are in an early stage but can be used in production.
 
+## Demo
+
+See the component in action: https://silenthoo.github.io/ph-selection-matrix
+
 ## 1. Install
 
 `bower install silentHoo/ph-selection-matrix`
