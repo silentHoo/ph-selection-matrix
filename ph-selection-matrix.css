@@ -1,0 +1,14 @@
+:host {
+  display: block; }
+
+table tr th {
+  padding: 1rem; }
+table td {
+  padding: 1rem;
+  border-bottom: 1px grey solid;
+  border-right: 1px grey solid; }
+table .first-column {
+  min-width: 10rem !important; }
+table .other-column {
+  min-width: 6rem;
+  text-align: center; }
