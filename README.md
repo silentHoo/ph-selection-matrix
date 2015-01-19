@@ -1,4 +1,4 @@
-ph-selection-matrix (Polymer web component)
+ph-selection-matrix
 ================
 
 This is one element in a series of different survey elements. It were build as part of my 
@@ -6,11 +6,8 @@ computer science master thesis. If you have any suggestions, bugs or some troubl
 the source code will not follow some best practices in web components or polymer) please
 contact me, open an issue or make a pull request with the improved code.
 
-The elements are in an early stage but can be used in production.
-
-## Demo
-
-See the component in action: https://silenthoo.github.io/ph-selection-matrix
+At the moment there is no save() or load() method to get or set the state of the matrix. This
+will follow up next.
 
 ## 1. Install
 
@@ -30,13 +27,13 @@ See the [component page](http://silentHoo.github.io/ph-selection-matrix) for mor
 
 ## Screenshots
 
-![Selection matrix in single-mode](screenshot_single-mode.png?raw=true "Selection matrix in single-mode")
-![Selection matrix in multi-mode](screenshot_multi-mode.png?raw=true "Selection matrix in multi-mode")
-![Selection matrix in single-mode with preselected column](screenshot_single-mode_preselected.png?raw=true "Selection matrix in single-mode  with preselected column")
+![Selection matrix in single-mode](https://github.com/silentHoo/ph-selection-matrix/raw/master/screenshot_single-mode.png?raw=true "Selection matrix in single-mode")
+![Selection matrix in multi-mode](https://github.com/silentHoo/ph-selection-matrix/raw/master/screenshot_multi-mode.png?raw=true "Selection matrix in multi-mode")
+![Selection matrix in single-mode with preselected column](https://github.com/silentHoo/ph-selection-matrix/raw/master/screenshot_single-mode_preselected.png?raw=true "Selection matrix in single-mode  with preselected column")
 
 ## License
 
-Copyright (c) 2014 Patrick Hillert. All rights reserved.
+Copyright (c) 2014-2015 Patrick Hillert. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
