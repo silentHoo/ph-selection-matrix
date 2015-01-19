@@ -7,6 +7,9 @@
   "keywords": [
     "selection matrix",
     "polymer",
+    "matrix",
+    "survey element",
+    "survey",
     "web-components"
   ],
   "main": "ph-selection-matrix.html",
