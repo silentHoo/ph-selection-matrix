@@ -54,7 +54,7 @@ Example 3: **Checkbox to select multiple answers per row and preselect the `Prod
 
 @group Question Type Survey Elements
 @element ph-selection-matrix
-@homepage https://github.com/silentHoo
+@homepage https://silenthoo.github.io/ph-selection-matrix
 @demo https://silenthoo.github.io/ph-selection-matrix/demo.html
 -->
 
@@ -133,6 +133,7 @@ Example 3: **Checkbox to select multiple answers per row and preselect the `Prod
 
   <script>
     (function () {
+      'use strict';
 
       Polymer({
         /**
@@ -156,7 +157,7 @@ Example 3: **Checkbox to select multiple answers per row and preselect the `Prod
          */
         publish: {
           mode: 'single-answer',
-          preselectedColumn: -1
+          preselectedColumn: ''
         },
 
         _distributedNodes: {
@@ -166,13 +167,15 @@ Example 3: **Checkbox to select multiple answers per row and preselect the `Prod
 
         _matrixState: [],
 
-        ready: function() {
-          this._initMatrixState();
+        domReady: function() {
+          // we must init here, not in ready(), because data bindings can do some work to prepare our
+          // <col-item> and <row-item> elements.
+          this._init();
         },
 
-        domReady: function() {
-          if (this.preselectedColumn !== -1) {
-            if (this.preselectedColumn > 0 && this.preselectedColumn < this._distributedNodes.cols.length) {
+        _checkColumns: function() {
+          if (this.preselectedColumn !== '') {
+            if (this.preselectedColumn > 0 && this.preselectedColumn <= this._distributedNodes.cols.length) {
               this._checkColumn(this.preselectedColumn - 1);
             } else {
               console.log('The preselected column is not > 0 nor <= the column count!');
@@ -188,25 +191,32 @@ Example 3: **Checkbox to select multiple answers per row and preselect the `Prod
           }, this);
         },
 
-        _restoreMatrixState: function() {
+        _restoreState: function() {
           this._iterateMatrix((function(rowId, colId) {
             this._getItem(rowId, colId).checked = this._matrixState[rowId][colId];
           }).bind(this));
         },
 
-        _initMatrixState: function() {
-          // read in the content nodes
-          this._prepareDistributedNodes('cols', this.$.cols.getDistributedNodes());
-          this._prepareDistributedNodes('rows', this.$.rows.getDistributedNodes());
+        _init: function() {
+          this.job('waitong for the DOM', function() {
+            // read in the content nodes
+            this._prepareDistributedNodes('cols', this.$.cols.getDistributedNodes());
+            this._prepareDistributedNodes('rows', this.$.rows.getDistributedNodes());
 
-          // set the state array, based on the distributed content nodes
-          this._iterateMatrix((function(rowId, colId) {
-            if (!this._matrixState[rowId]) {
-              this._matrixState[rowId] = [];
-            }
-            // everything is initially unchecked
-            this._matrixState[rowId][colId] = false;
-          }).bind(this));
+            // set the state array, based on the distributed content nodes
+            this._iterateMatrix((function(rowId, colId) {
+              if (!this._matrixState[rowId]) {
+                this._matrixState[rowId] = [];
+              }
+              // everything is initially unchecked
+              this._matrixState[rowId][colId] = false;
+            }).bind(this));
+
+
+            this.job('', function() {
+              this._checkColumns();
+            });
+          });
         },
 
         _iterateMatrix: function(cellProcessingCallback) {
